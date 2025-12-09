@@ -40,12 +40,37 @@ class DatasetProxy:
 
         return to / uri
 
+    def register(self, *, filename: str, **extra) -> None:
+        print(f"Registered dataset {self.name} with filename {filename} and metadata {extra}")
+        return self
+
+    def save(self, /, obj, func=None, **kwargs):
+        if func is None:
+            return obj
+        
+        return func(obj, **kwargs)
+
+class MetadataClient(metaclass=Singleton):
+    def __init__(self):
+        ...
+    
+    def get(self, *fields, by: None|Callable = None) -> dict:
+        if by:
+            return by(*fields)
+        
+        return dict()
+
+    def __getattr__(self, name: str): 
+        return MetadataClient()
+
 
 class Client(metaclass=Singleton):
     _used: set[str]
+    metadata: MetadataClient
 
     def __init__(self):
         self._used = set()
+        self.metadata = MetadataClient()
 
     @property
     def used(self) -> frozenset[str]:
@@ -93,11 +118,17 @@ if TYPE_CHECKING:
 
     class Client(type):
         used: set[str]
+        metadata: MetadataClient
         """
         The list of unique datasets that have been used.
         """
 
         def __init__(self): ...
         def __getattr__(self, name: str) -> type[DatasetProxy]: ...
+
+    class MetadataClient(type):
+        def __init__(self): ...
+        def get(self, /, *fields, by: None|Callable = None) -> dict: ...
+        def __getattr__(self, name: str) -> DatasetProxy: ...
 
 Datasets = Client()
