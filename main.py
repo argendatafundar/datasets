@@ -1,6 +1,13 @@
-def main():
-    print("Hello from datasets!")
+import dotenv
+import requests
 
+API_HOSTNAME = dotenv.dotenv_values()['API_HOSTNAME']
 
-if __name__ == "__main__":
-    main()
+print(
+    requests.get(
+        f'{API_HOSTNAME}/raw',
+        params={
+            'id': 'R229C0',
+        },
+    ).text
+)

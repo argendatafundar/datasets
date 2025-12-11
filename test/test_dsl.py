@@ -6,7 +6,7 @@ import ast, pathlib
 def test_get_datasets_valid():
     testcase = "Datasets.R1C0.method(version='latest')"
 
-    assert get_datasets(testcase) == {Request(name='R1C0', version='latest')}
+    assert get_datasets(testcase) == {Request(name='R1C0', method='method', version='latest')}
 
     testcase =\
         """
@@ -17,7 +17,7 @@ def test_get_datasets_valid():
         )
         """
 
-    assert get_datasets(testcase) == {Request(name='R1C0', version='latest')}
+    assert get_datasets(testcase) == {Request(name='R1C0', method='method', version='latest')}
 
 def dataset_getter_mock(uri: str) -> str:
     return uri

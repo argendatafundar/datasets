@@ -4,6 +4,7 @@ import ast
 @dataclass(frozen=True)
 class Request:
     name: str
+    method: str
     version: str | None = None
 
     def __str__(self):
@@ -28,6 +29,7 @@ def parse_node(node: ast.expr) -> None|Request:
         return None
 
     dataset_name = dataset_attr.attr
+    method_name = node.func.attr
 
     version = None
     for kw in node.keywords:
@@ -35,7 +37,7 @@ def parse_node(node: ast.expr) -> None|Request:
             version = kw.value.value
             break
     
-    return Request(name=dataset_name, version=version)
+    return Request(name=dataset_name, version=version, method=method_name)
 
 
 def get_datasets(text: str) -> set[Request]:
