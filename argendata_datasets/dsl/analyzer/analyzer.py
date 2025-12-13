@@ -31,6 +31,9 @@ def parse_node(node: ast.expr) -> None|Request:
     dataset_name = dataset_attr.attr
     method_name = node.func.attr
 
+    if method_name == 'register':
+        return None
+
     version = None
     for kw in node.keywords:
         if kw.arg == 'version' and isinstance(kw.value, ast.Constant):
