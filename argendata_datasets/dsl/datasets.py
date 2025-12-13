@@ -8,8 +8,12 @@ type DatasetGetter = Callable[[str], Dataset]
 type DatasetDownloader = Callable[[str, pathlib.Path], pathlib.Path]
 
 class DatasetProxy:
-    def __init__(self, name: str):
+    __registrations_metadata__: list[dict]
+
+    def __init__(self, name: str, client: 'Client'):
         self.name = name
+        self.__registrations_metadata__ = list()
+        self.client = client
 
     def get(
         self, *,
@@ -41,8 +45,24 @@ class DatasetProxy:
         return to / uri
 
     def register(self, *, filename: str, **extra) -> None:
+
+        self.__registrations_metadata__.append({
+            "name": self.name,
+            "filename": filename,
+            **extra
+        })
+
+        self.client._produced.append({
+            "name": self.name,
+            "filename": filename,
+            **extra
+        })
+
         print(f"Registered dataset {self.name} with filename {filename} and metadata {extra}")
         return self
+    
+    def _get_registrations_metadata_stack(self) -> dict:
+        return self.client._produced
 
     def save(self, /, obj, func=None, **kwargs):
         if func is None:
@@ -66,21 +86,27 @@ class MetadataClient(metaclass=Singleton):
 
 class Client(metaclass=Singleton):
     _used: set[str]
+    _produced: list[dict]
     metadata: MetadataClient
 
     def __init__(self):
         self._used = set()
+        self._produced = list()
         self.metadata = MetadataClient()
 
     @property
     def used(self) -> frozenset[str]:
         return frozenset(self._used)
 
+    @property
+    def produced(self) -> list[dict]:
+        return self._produced
+
     def uses(self, uri: str):
         self._used.add(uri)
 
     def __getattr__(self, name: str): 
-        return DatasetProxy(name)
+        return DatasetProxy(name, self)
 
 # ==============================================================================
 # Dummy specifications for type checking purposes.
