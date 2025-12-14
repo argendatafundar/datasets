@@ -4,12 +4,14 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = [
-    "polars>=1.35.2",
-]
+dependencies = []
 
 [dependency-groups]
 test = [
+    "polars>=1.35.2",
     "pytest>=9.0.1",
     "python-dotenv>=1.2.1",
+]
+dev = [
+    "polars>=1.35.2",
 ]

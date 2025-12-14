@@ -2,7 +2,6 @@ import rootdir
 
 from dataclasses import dataclass
 import argendata_datasets
-import polars as pl
 import dotenv
 import pytest
 
@@ -17,6 +16,7 @@ def fixture():
     )
 
 def test_static(fixture):
+    import polars as pl
     static_hostname = fixture.static_hostname
 
     raw_index = argendata_datasets.static.raw.get_index(static_hostname)

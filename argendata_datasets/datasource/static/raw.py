@@ -1,6 +1,5 @@
 import urllib.request
 import urllib.parse
-import polars as pl
 import pathlib
 import io
 from .utils import make_request
@@ -13,6 +12,7 @@ def get_index(
     query='',
     fragment='',
 ):
+    import polars as pl
     request = make_request(
         hostname=hostname,
         scheme=scheme,

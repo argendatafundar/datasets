@@ -1,6 +1,5 @@
 import urllib.request
 import urllib.parse
-import polars as pl
 import io
 import pathlib
 
@@ -12,6 +11,7 @@ def get_index(
     query='',
     fragment='',
 ):
+    import polars as pl
     parts = urllib.parse.ParseResult(
         scheme=scheme,
         netloc=hostname,
@@ -34,7 +34,8 @@ def get_by_filename(
     params='',
     query='',
     fragment='',
-) -> pl.DataFrame:
+):
+    import polars as pl
     path = pathlib.Path(path) / filename
     path = str(path)
 
