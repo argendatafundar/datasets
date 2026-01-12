@@ -16,6 +16,20 @@ from scipy import stats
 
 # Optional plotting (kept lightweight, matplotlib only)
 import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
+
+
+@dataclass
+class ControlValoresNumResult:
+    """Result of numeric column comparison between two dataframes."""
+    nuevos_na: int
+    mean_variaciones_rel: float
+    ks_test: float
+    mw_test: float
+    tasa_posibles_outliers: float
+    plot: Optional[Figure]
+    filas_nuevos_na: pl.DataFrame
+    filas_posibles_outliers: pl.DataFrame
 
 
 def _ensure_pk(pk: Optional[Sequence[str]]) -> List[str]:
@@ -164,7 +178,7 @@ def control_valores_num(
     k: float,
     df: pl.DataFrame,
     make_plot: bool = True,
-) -> Dict[str, Any]:
+) -> ControlValoresNumResult:
     col_x = f"{root_name}.x"
     col_y = f"{root_name}.y"
 
@@ -264,16 +278,16 @@ def control_valores_num(
         ax.grid(True, alpha=0.2)
         fig.tight_layout()
 
-    return {
-        "nuevos_na": na_count,
-        "mean_variaciones_rel": mean_variaciones_rel,
-        "ks_test": ks_p,
-        "mw_test": mw_p,
-        "tasa_posibles_outliers": tasa_posibles_outliers,
-        "plot": fig,
-        "filas_nuevos_na": filas_nuevos_na,
-        "filas_posibles_outliers": outliers_df,
-    }
+    return ControlValoresNumResult(
+        nuevos_na=na_count,
+        mean_variaciones_rel=mean_variaciones_rel,
+        ks_test=ks_p,
+        mw_test=mw_p,
+        tasa_posibles_outliers=tasa_posibles_outliers,
+        plot=fig,
+        filas_nuevos_na=filas_nuevos_na,
+        filas_posibles_outliers=outliers_df,
+    )
 
 
 def comparar_df(
