@@ -7,6 +7,7 @@ class Dataset: ...
 type DatasetGetter = Callable[[str], Dataset]
 type DatasetDownloader = Callable[[str, pathlib.Path], pathlib.Path]
 
+
 class DatasetProxy:
     __registrations_metadata__: list[dict]
 

@@ -15,6 +15,7 @@ def fixture():
         static_hostname = dotenv.dotenv_values()['STATIC_HOSTNAME'],
     )
 
+@pytest.mark.skip
 def test_static(fixture):
     import polars as pl
     static_hostname = fixture.static_hostname

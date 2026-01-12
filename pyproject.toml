@@ -7,11 +7,11 @@ requires-python = ">=3.13"
 dependencies = []
 
 [dependency-groups]
-test = [
+dev = [
     "polars>=1.35.2",
     "pytest>=9.0.1",
     "python-dotenv>=1.2.1",
 ]
-dev = [
+test = [
     "polars>=1.35.2",
 ]
