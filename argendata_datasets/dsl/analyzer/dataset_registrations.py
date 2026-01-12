@@ -24,6 +24,28 @@ class DatasetSave:
     node: ast.expr
 
 class Symbol(TypedDict):
+    """
+    Representa el simbolo utilizado en el script para registrar y guardar el dataset.
+    Esto es así para forzar el contexto register-save.
+
+    Ejemplos:
+
+    ### OK:
+    >>> ds = Datasets.R1C0.register(filename='data.csv')
+    >>> # ...
+    >>> ds.save(...)
+
+    En este caso, el simbolo es 'ds' y posee su registro en la linea 1,
+    y su guardado al final del script.
+
+    ### Missing save
+    >>> ds = Datasets.R1C0.register(filename='data.csv')
+    >>> # ...
+
+    ### Missing register
+    >>> # ...
+    >>> Datasets.R1C0.save(...)
+    """
     symbol: str
     registration: DatasetRegister
     save: DatasetSave
