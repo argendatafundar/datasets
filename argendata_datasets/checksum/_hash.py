@@ -29,15 +29,15 @@ class Hash:
     def __post_init__(self):
         self.filename = valid_filename(self.filename)
 
-    def __str__(self):
+    def to_str(self, include_filename: bool = True):
         hash_part = f"{self.method}:{self.hexdigest}"
 
-        if self.filename is None:
+        if (self.filename is None) or (not include_filename):
             return hash_part
         
         return f"{self.filename}@{hash_part}"
-
-    def to_str(self): return str(self)
+    
+    def __str__(self): return self.to_str()
 
     @classmethod
     def from_str(cls, s: str):
