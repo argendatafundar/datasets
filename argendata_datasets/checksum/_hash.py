@@ -54,15 +54,20 @@ class Hash:
     def __repr__(self):
         return f'<Hash object {self.method}:{self.hexdigest} @ {hex(id(self))}>'
 
-    def __eq__(self, other: object) -> bool:
+    def equals(self, other: object, filename_eq: bool = True) -> bool:
         if isinstance(other, str):
             return self == Hash.from_str(other)
         
         if not isinstance(other, Hash):
             return False
         
-        filename_eq = True
-        if (self.filename is not None) and (other.filename is not None):
-            filename_eq = self.filename == other.filename
-        
-        return self.method == other.method and self.hexdigest == other.hexdigest and filename_eq
+        if filename_eq:
+            return self.method == other.method and self.hexdigest == other.hexdigest and self.filename == other.filename
+        else:
+            return self.method == other.method and self.hexdigest == other.hexdigest
+
+    def __eq__(self, other: object) -> bool:
+        """
+        Strict equality comparison.
+        """
+        return self.equals(other, filename_eq=True)
