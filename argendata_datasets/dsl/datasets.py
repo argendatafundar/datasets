@@ -143,6 +143,27 @@ if TYPE_CHECKING:
             """
             ...
 
+        @classmethod
+        def register(
+            self, *,
+            filename: str,
+            **extra
+        ) -> None:
+            """
+            Args:
+                - filename: The filename of the dataset.
+            """
+            ...
+            
+        @classmethod
+        def save(
+            self, /, obj, func=None, **kwargs
+        ) -> None:
+            """
+            Args:
+                - obj: The object to save.
+            """
+            ...
     class Client(type):
         used: set[str]
         metadata: MetadataClient
