@@ -47,11 +47,11 @@ class Proxy:
         return by(self.dataset_id)
     
     def download(self, to: str|Path, by: None|DatasetDownloader=None):
-        self.parent.DEPENDENCIES.add((self.dataset_id, by))
+        self.parent.DEPENDENCIES.add(self.dataset_id)
 
     def register(self, filename: str, **kwargs):
         data = dict(filename=filename, **kwargs)
-        self.parent.REGISTRY.add((self.dataset_id))
+        self.parent.REGISTRY[self.dataset_id] = data
     
     def save(self, /, obj, func=None, **kwargs):
         self.parent.EXPORTS.add(self.dataset_id)
@@ -63,7 +63,7 @@ class Proxy:
 
 class Datasets(type):
     DEPENDENCIES = set()
-    REGISTRY = set()
+    REGISTRY = dict()
     EXPORTS = set()
     
     @staticmethod
@@ -78,14 +78,14 @@ class Datasets(type):
     
     class _Representation(BaseModel):
         dependencies: list[str]
-        registry: list[str]
+        registry: dict[str, dict[str, object]]
         exports: list[str]
 
     @classmethod
     def get_representation(cls):
         return cls._Representation(
             dependencies=list(cls.DEPENDENCIES),
-            registry=list(cls.REGISTRY),
+            registry=cls.REGISTRY,
             exports=list(cls.EXPORTS)
         )
     
