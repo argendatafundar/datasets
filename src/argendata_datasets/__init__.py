@@ -1,5 +1,6 @@
 from pathlib import Path
 from typing import Protocol
+from pydantic import BaseModel
 
 class DatasetGetter(Protocol):
     def __call__(self, dataset_id: str, version: str):
@@ -50,7 +51,7 @@ class Proxy:
 
     def register(self, filename: str, **kwargs):
         data = dict(filename=filename, **kwargs)
-        self.parent.REGISTRY[self.dataset_id] = data
+        self.parent.REGISTRY.add((self.dataset_id))
     
     def save(self, /, obj, func=None, **kwargs):
         self.parent.EXPORTS.add(self.dataset_id)
@@ -62,7 +63,7 @@ class Proxy:
 
 class Datasets(type):
     DEPENDENCIES = set()
-    REGISTRY = dict()
+    REGISTRY = set()
     EXPORTS = set()
     
     @staticmethod
@@ -74,5 +75,23 @@ class Datasets(type):
 
     def __getattr__(self, name: str):
         return self.require(name)
+    
+    class _Representation(BaseModel):
+        dependencies: list[str]
+        registry: list[str]
+        exports: list[str]
+
+    def get_representation(self):
+        return self._Representation(
+            dependencies=list(self.DEPENDENCIES),
+            registry=list(self.REGISTRY),
+            exports=list(self.EXPORTS)
+        )
+    
+    def model_dump(self, **kwargs):
+        return self.get_representation().model_dump(**kwargs)
+    
+    def model_dump_json(self, **kwargs):
+        return self.get_representation().model_dump_json(**kwargs)
 
 class Dataset(metaclass=Datasets): ...
