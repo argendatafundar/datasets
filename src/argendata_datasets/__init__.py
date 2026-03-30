@@ -9,6 +9,11 @@ class DatasetDownloader(Protocol):
     def __call__(self, dataset_id: str, version: str, to: str|Path):
         ...
 
+def _default_get(id: str):
+    import dotenv
+    print(dotenv.dotenv_values(dotenv.find_dotenv()))
+    return None
+
 class Proxy:
     def __init__(self, dataset_id: str, parent: 'Datasets') -> None:
         self.dataset_id = dataset_id
@@ -16,6 +21,11 @@ class Proxy:
 
     def get(self, by: None|DatasetGetter=None):
         self.parent.DEPENDENCIES.add((self.dataset_id, by))
+
+        if not by:
+            return _default_get(self.dataset_id)
+        
+        return by(self.dataset_id)
     
     def download(self, to: str|Path, by: None|DatasetDownloader=None):
         self.parent.DEPENDENCIES.add((self.dataset_id, by))
