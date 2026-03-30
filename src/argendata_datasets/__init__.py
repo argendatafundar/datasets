@@ -10,9 +10,8 @@ class DatasetDownloader(Protocol):
         ...
 
 def _default_get(id: str):
-    import dotenv
-    print(dotenv.dotenv_values(dotenv.find_dotenv()))
-    return None
+    import argendata_api
+    print(argendata_api)
 
 class Proxy:
     def __init__(self, dataset_id: str, parent: 'Datasets') -> None:
