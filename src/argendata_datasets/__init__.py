@@ -39,7 +39,7 @@ class Proxy:
         self.parent = parent
 
     def get(self, by: None|DatasetGetter=None):
-        self.parent.DEPENDENCIES.add((self.dataset_id, by))
+        self.parent.DEPENDENCIES.add(self.dataset_id)
 
         if not by:
             return _default_get(self.dataset_id)
