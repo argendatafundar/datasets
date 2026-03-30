@@ -14,7 +14,7 @@ def _default_get(id: str):
     import re
     client = Client.default()
     client.login()
-    pattern = re.compile('R([0-9])C([0-9])')
+    pattern = re.compile('R([0-9]+)C([0-9]+)')
     matches = re.match(pattern, id)
 
     if not matches:
