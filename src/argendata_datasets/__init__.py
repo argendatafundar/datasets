@@ -18,7 +18,7 @@ def _default_get(id: str):
     matches = pattern.match(id)
 
     if not matches:
-        raise ValueError('Invalid id')
+        raise ValueError(f"Invalid id '{id}'")
     
     r = matches.group(1)
     c = matches.group(2)
