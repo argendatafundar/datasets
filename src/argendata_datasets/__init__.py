@@ -81,17 +81,20 @@ class Datasets(type):
         registry: list[str]
         exports: list[str]
 
-    def get_representation(self):
-        return self._Representation(
-            dependencies=list(self.DEPENDENCIES),
-            registry=list(self.REGISTRY),
-            exports=list(self.EXPORTS)
+    @classmethod
+    def get_representation(cls):
+        return cls._Representation(
+            dependencies=list(cls.DEPENDENCIES),
+            registry=list(cls.REGISTRY),
+            exports=list(cls.EXPORTS)
         )
     
-    def model_dump(self, **kwargs):
-        return self.get_representation().model_dump(**kwargs)
+    @classmethod
+    def model_dump(cls, **kwargs):
+        return cls.get_representation().model_dump(**kwargs)
     
-    def model_dump_json(self, **kwargs):
-        return self.get_representation().model_dump_json(**kwargs)
+    @classmethod
+    def model_dump_json(cls, **kwargs):
+        return cls.get_representation().model_dump_json(**kwargs)
 
 class Dataset(metaclass=Datasets): ...
