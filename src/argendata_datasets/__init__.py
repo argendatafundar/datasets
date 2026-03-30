@@ -15,7 +15,7 @@ def _default_get(id: str):
     client = Client.default()
     client.login()
     pattern = re.compile('R([0-9]+)C([0-9]+)')
-    matches = re.match(pattern, id)
+    matches = pattern.match(id)
 
     if not matches:
         raise ValueError('Invalid id')
