@@ -14,7 +14,7 @@ def _default_get(id: str):
     import re
     client = Client.default()
     client.login()
-    pattern = re.Pattern('R([0-9])C([0-9])')
+    pattern = re.compile('R([0-9])C([0-9])')
     matches = re.match(pattern, id)
 
     if not matches:
@@ -25,7 +25,7 @@ def _default_get(id: str):
 
     datasets = client.datasets
     target = datasets.clean if int(c) > 0 else datasets.raw
-    
+
     return target.get(id)
     
 
