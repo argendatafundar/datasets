@@ -10,10 +10,24 @@ class DatasetDownloader(Protocol):
         ...
 
 def _default_get(id: str):
-    from argendata_api import Client, Settings
-    from dotenv import find_dotenv
-    settings = Settings(_env_file=(find_dotenv('.env'), ))
-    return Client.from_settings(settings=settings)
+    from argendata_api import Client
+    import re
+    client = Client.default()
+    client.login()
+    pattern = re.Pattern('R([0-9])C([0-9])')
+    matches = re.match(pattern, id)
+
+    if not matches:
+        raise ValueError('Invalid id')
+    
+    r = matches.group(1)
+    c = matches.group(2)
+
+    datasets = client.datasets
+    target = datasets.clean if int(c) > 0 else datasets.raw
+    
+    return target.get(id)
+    
 
 class Proxy:
     def __init__(self, dataset_id: str, parent: 'Datasets') -> None:
