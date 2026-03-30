@@ -26,7 +26,7 @@ def _default_get(id: str):
     datasets = client.datasets
     target = datasets.clean if int(c) > 0 else datasets.raw
 
-    return target.get(id)
+    return target.insepect(id)
     
 
 class Proxy:
