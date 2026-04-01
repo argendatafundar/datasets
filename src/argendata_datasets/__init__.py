@@ -1,6 +1,7 @@
 from pathlib import Path
 from typing import Protocol
 from pydantic import BaseModel
+from enum import StrEnum
 import os
 
 __external_runtime_environment_variable__ = 'ARGENDATA_EXTERNAL_RUNTIME'
@@ -111,3 +112,28 @@ class Datasets(type):
         return cls.get_representation().model_dump_json(**kwargs)
 
 class Dataset(metaclass=Datasets): ...
+
+class Topicos(StrEnum):
+    ACECON = 'ACECON'
+    AGROPE = 'AGROPE'
+    CAMCLI = 'CAMCLI'
+    CIETEC = 'CIETEC'
+    COMEXT = 'COMEXT'
+    CRECIM = 'CRECIM'
+    DEMOGR = 'DEMOGR'
+    DESHUM = 'DESHUM'
+    DESIGU = 'DESIGU'
+    ESTPRO = 'ESTPRO'
+    FISCAL = 'FISCAL'
+    INDUST = 'INDUST'
+    INFDES = 'INFDES'
+    MERTRA = 'MERTRA'
+    MINERI = 'MINERI'
+    PESCAS = 'PESCAS'
+    POBREZ = 'POBREZ'
+    PRECIO = 'PRECIO'
+    SALING = 'SALING'
+    SCROLL = 'SCROLL'
+    SEBACO = 'SEBACO'
+    TRANEN = 'TRANEN'
+    TURISM = 'TURISM'
