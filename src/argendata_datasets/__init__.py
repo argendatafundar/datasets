@@ -49,8 +49,8 @@ class Proxy:
     def download(self, to: str|Path, by: None|DatasetDownloader=None):
         self.parent.DEPENDENCIES.add(self.dataset_id)
 
-    def register(self, filename: str, **kwargs):
-        data = dict(filename=filename, **kwargs)
+    def register(self, filepath: str, **kwargs):
+        data = dict(filepath=filepath, **kwargs)
         self.parent.REGISTRY[self.dataset_id] = data
     
     def save(self, /, obj, func=None, **kwargs):
