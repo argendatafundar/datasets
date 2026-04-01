@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Protocol
+from typing import Annotated, Protocol
 from pydantic import BaseModel
 from enum import StrEnum
 import os
@@ -113,27 +113,35 @@ class Datasets(type):
 
 class Dataset(metaclass=Datasets): ...
 
+class Categoria(StrEnum):
+    AMBIENTE      = 'Ambiente'
+    MACROECONOMIA = 'Macroeconomía'
+    DESARROLLO    = 'Desarrollo'
+    PRODUCTIVOS   = 'Sectores productivos'
+    TRABAJO       = 'Trabajo e ingresos'
+    POBLACION     = 'Población'
+
 class Topicos(StrEnum):
-    ACECON = 'ACECON'
-    AGROPE = 'AGROPE'
-    CAMCLI = 'CAMCLI'
-    CIETEC = 'CIETEC'
-    COMEXT = 'COMEXT'
-    CRECIM = 'CRECIM'
-    DEMOGR = 'DEMOGR'
-    DESHUM = 'DESHUM'
-    DESIGU = 'DESIGU'
-    ESTPRO = 'ESTPRO'
-    FISCAL = 'FISCAL'
-    INDUST = 'INDUST'
-    INFDES = 'INFDES'
-    MERTRA = 'MERTRA'
-    MINERI = 'MINERI'
-    PESCAS = 'PESCAS'
-    POBREZ = 'POBREZ'
-    PRECIO = 'PRECIO'
-    SALING = 'SALING'
-    SCROLL = 'SCROLL'
-    SEBACO = 'SEBACO'
-    TRANEN = 'TRANEN'
-    TURISM = 'TURISM'
+    ACECON: Annotated[str, None,                    'Actividad Económica']                   = 'ACECON'
+    AGROPE: Annotated[str, Categoria.PRODUCTIVOS,   'Agroindustria']                         = 'AGROPE'
+    CIETEC: Annotated[str, Categoria.DESARROLLO,    'Ciencia y tecnología']                  = 'CIETEC'
+    COMEXT: Annotated[str, Categoria.DESARROLLO,    'Comercio exterior']                     = 'COMEXT'
+    CRECIM: Annotated[str, Categoria.MACROECONOMIA, 'Crecimiento']                           = 'CRECIM'
+    DEMOGR: Annotated[str, Categoria.POBLACION,     'Demografía']                            = 'DEMOGR'
+    DESHUM: Annotated[str, Categoria.DESARROLLO,    'Desarrollo humano']                     = 'DESHUM'
+    DESIGU: Annotated[str, Categoria.DESARROLLO,    'Desigualdad']                           = 'DESIGU'
+    ESTPRO: Annotated[str, Categoria.PRODUCTIVOS,   'Estructura productiva']                 = 'ESTPRO'
+    FISCAL: Annotated[str, Categoria.MACROECONOMIA, 'Fiscal']                                = 'FISCAL'
+    INDUST: Annotated[str, Categoria.PRODUCTIVOS,   'Industria']                             = 'INDUST'
+    INFDES: Annotated[str, Categoria.TRABAJO,       'Informalidad y desempleo']              = 'INFDES'
+    MERTRA: Annotated[str, Categoria.TRABAJO,       'Mercado laboral']                       = 'MERTRA'
+    MINERI: Annotated[str, Categoria.PRODUCTIVOS,   'Minería']                               = 'MINERI'
+    PESCAS: Annotated[str, Categoria.PRODUCTIVOS,   'Pesca y acuicultura']                   = 'PESCAS'
+    POBREZ: Annotated[str, Categoria.DESARROLLO,    'Pobreza']                               = 'POBREZ'
+    PRECIO: Annotated[str, Categoria.MACROECONOMIA, 'Precio']                                = 'PRECIO'
+    SALING: Annotated[str, Categoria.TRABAJO,       'Salarios e ingresos']                   = 'SALING'
+    SCROLL: Annotated[str, Categoria.PRODUCTIVOS,   'Scroll']                                = 'SCROLL'
+    SEBACO: Annotated[str, Categoria.PRODUCTIVOS,   'Servicios basados en el conocimiento']  = 'SEBACO'
+    TRANEN: Annotated[str, Categoria.AMBIENTE,      'Transición energética']                 = 'TRANEN'
+    TURISM: Annotated[str, Categoria.PRODUCTIVOS,   'Turismo']                               = 'TURISM'
+    CAMCLI: Annotated[str, Categoria.AMBIENTE,      'Cambio climático y emisiones de gases de efecto invernadero'] = 'CAMCLI'
