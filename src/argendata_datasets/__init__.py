@@ -4,7 +4,16 @@ from pydantic import BaseModel
 import os
 
 __external_runtime_environment_variable__ = 'ARGENDATA_EXTERNAL_RUNTIME'
-EXTERNAL_RUNTIME: bool = os.environ.get(__external_runtime_environment_variable__, 'False')
+
+def get_external_runtime():
+    env_var = os.environ.get(__external_runtime_environment_variable__, None)
+    
+    if not env_var:
+        return False
+    
+    return env_var.lower() in ('true', '1')
+
+EXTERNAL_RUNTIME: bool = get_external_runtime()
 
 class DatasetGetter(Protocol):
     def __call__(self, dataset_id: str, version: str):
