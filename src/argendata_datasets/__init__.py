@@ -28,6 +28,7 @@ def _default_get(id: str):
     from argendata_internal_client import Client, Settings
     import re
     client = Client.default()
+    print(client)
     pattern = re.compile('R([0-9]+)C([0-9]+)')
     matches = pattern.match(id)
 
