@@ -25,7 +25,7 @@ class DatasetDownloader(Protocol):
         ...
 
 def _default_get(id: str):
-    from argendata_api import Client
+    from argendata_internal_client import Client, Settings
     import re
     client = Client.default()
     client.login()
