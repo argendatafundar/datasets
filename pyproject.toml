@@ -8,7 +8,7 @@ authors = [
 ]
 requires-python = ">=3.13"
 dependencies = [
-    "argendata-internal-client",
+    "argendata-internal-client@git+https://github.com/joangq/argendata_internal_client",
     "pydantic>=2.12.5",
 ]
 
@@ -19,5 +19,5 @@ argendata-datasets = "argendata_datasets:main"
 requires = ["uv_build>=0.9.17,<0.10.0"]
 build-backend = "uv_build"
 
-[tool.uv.sources]
-argendata-internal-client = { path = "../argendata_internal_client", editable = true }
+# [tool.uv.sources]
+# argendata-internal-client = { path = "../argendata_internal_client", editable = true }
