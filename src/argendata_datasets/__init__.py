@@ -6,6 +6,13 @@ import os
 
 __external_runtime_environment_variable__ = 'ARGENDATA_EXTERNAL_RUNTIME'
 
+def set_external_runtime(value: bool):
+    if not isinstance(value, bool):
+        raise TypeError("'value' must be a valid boolean")
+
+    os.environ[__external_runtime_environment_variable__] = 'true' if value else 'false'
+    
+
 def get_external_runtime():
     env_var = os.environ.get(__external_runtime_environment_variable__, None)
     
