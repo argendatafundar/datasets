@@ -8,7 +8,6 @@ authors = [
 ]
 requires-python = ">=3.13"
 dependencies = [
-    "argendata-internal-client@git+https://github.com/joangq/argendata_internal_client",
     "pydantic>=2.12.5",
 ]
 
