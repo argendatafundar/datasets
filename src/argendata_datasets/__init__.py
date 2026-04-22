@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Annotated, Protocol
+from typing import Annotated, Callable, Protocol
 from pydantic import BaseModel
 from enum import StrEnum
 import os
@@ -84,6 +84,39 @@ def _default_download(dataset_id: str, version: str, to: str | Path):
     data = _default_get(dataset_id, version)
     Path(to).write_bytes(data)
 
+def _default_inspect(dataset_id: str, version: str):
+    from argendata_internal_client import Client
+    import re
+
+    client = Client.default()
+
+    pattern = re.compile('R([0-9]+)C([0-9]+)')
+    matches = pattern.match(dataset_id)
+
+    if not matches:
+        raise ValueError(f"Invalid id '{dataset_id}'")
+
+    c = matches.group(2)
+
+    target = client.datasets.clean if int(c) > 0 else client.datasets.raw
+    insp = target.inspect(dataset_id)
+    insp.raise_for_status()
+
+    if version in ('', 'latest'):
+        try:
+            resolved = _version_id_from_inspect_json(insp.json())
+        except (ValueError, KeyError, IndexError):
+            resolved = 'latest'
+        version = resolved
+
+    Datasets.DEPENDENCIES[dataset_id] = version
+    
+    version_metadata = next((x for x in insp.json()['versions'] if x['version_id'] == version), None)
+    
+    if not version_metadata:
+        raise ValueError
+    
+    return insp.json()
 
 class Proxy:
     def __init__(self, dataset_id: str, parent: 'Datasets') -> None:
@@ -93,6 +126,11 @@ class Proxy:
     def get(self, by: None|DatasetGetter=None, version: None|str=None):
         version = version or 'latest'
         getter = by or _default_get
+        return getter(self.dataset_id, version)
+
+    def inspect(self, by: None|Callable=None, version: None|str=None):
+        version = version or 'latest'
+        getter = by or _default_inspect
         return getter(self.dataset_id, version)
     
     def download(self, to: str|Path, by: None|DatasetDownloader=None, version: None|str=None):
